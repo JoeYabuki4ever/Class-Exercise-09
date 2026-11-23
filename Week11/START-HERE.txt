@@ -1,0 +1,55 @@
+Week 11 | Containerization
+Taharim Haque | 101418321
+
+Extract this ZIP first. Open the Week11 folder in File Explorer, type
+powershell in its address bar and press Enter. Start Docker Desktop in Linux
+container mode. Part II also uses Git, kubectl and Minikube.
+
+PART I | Build and run the Python app
+Run these commands one at a time:
+  cd lab11_Docker
+  docker run hello-world
+  docker build --tag=hellodocker .
+  docker image ls hellodocker
+  docker run -p 4000:80 hellodocker
+
+Leave this terminal open. In a browser visit http://localhost:4000.
+Look for Hello World!, the container hostname and the message that the
+Redis counter is disabled. The lab installs the Redis client only.
+Return to PowerShell, press Ctrl+C and run:
+  docker container ls
+  cd ..
+
+PART II | Fork, deploy and collect screenshots
+1. Sign in to GitHub. Open the instructor's repository:
+   https://github.com/pritamworld/DevOps_Kubernetes_exercise9
+   Click Fork, select your account and click Create fork. Capture the fork
+   page with your account name visible. From its Code menu copy the HTTPS URL.
+2. From the Week11 folder run:
+   git clone YOUR_COPIED_URL lab11-fork
+   cd lab11-fork/k8
+   Replace YOUR_COPIED_URL with the URL you just copied. Capture the clone
+   output. The k8 folder in this ZIP also contains the instructor's manifests.
+3. Start the local cluster and select its context:
+   minikube start --driver=docker
+   kubectl config use-context minikube
+4. Run each command separately. Capture the command and its actual output
+   after each step with Windows+Shift+S and save each screenshot in order.
+   kubectl apply -f nginx-deploy.yaml
+   kubectl apply -f nginx-service.yaml
+   kubectl rollout status deployment/nginx
+   kubectl get pods -l app=nginx -o wide
+   kubectl get svc nginx-nodeport
+   Look for a successful rollout, three ready nginx pods, and a NodePort
+   service mapping port 80 to 30080.
+5. Run:
+   minikube service nginx-nodeport --url
+   Capture the printed URL and leave this PowerShell window open. Open the
+   exact URL in a browser and capture the nginx welcome page with the URL.
+6. Once you have your screenshots, press Ctrl+C in the tunnel window.
+   From lab11-fork/k8, run and capture each cleanup command:
+   kubectl delete -f nginx-deploy.yaml
+   kubectl delete -f nginx-service.yaml
+
+The screenshots must document your live run. Expected results above are
+provided to help you check each step.
